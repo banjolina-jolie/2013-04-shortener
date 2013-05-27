@@ -42,14 +42,29 @@ eos
 #
 # http://guides.rubyonrails.org/association_basics.html
 class Link < ActiveRecord::Base
+    validates :url, :uniqueness => true
 end
 
 get '/' do
     form
 end
 
+get '/1/:shortened' do |n|
+    puts "N ARGUMENT: #{n}"
+end
+
 post '/new' do
-    # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
+    link = Link.new
+    link.url = params['url']
+    link.save # generate id
+    link.shortened = link.id
+    link.save
+
+    if link.errors then
+        link = Link.find_by_url params['url']
+    end
+
+    "http://localhost:4567/1/#{link.id}"
 end
 
 get '/jquery.js' do
