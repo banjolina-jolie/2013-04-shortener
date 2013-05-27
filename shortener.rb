@@ -13,12 +13,12 @@ end
 # Quick and dirty form for testing application
 #
 # If building a real application you should probably
-# use views: 
+# use views:
 # http://www.sinatrarb.com/intro#Views%20/%20Templates
 form = <<-eos
     <form id='myForm'>
         <input type='text' name="url">
-        <input type="submit" value="Shorten"> 
+        <input type="submit" value="Shorten">
     </form>
     <h2>Results:</h2>
     <h3 id="display"></h3>
@@ -36,8 +36,8 @@ form = <<-eos
     </script>
 eos
 
-# Models to Access the database 
-# through ActiveRecord.  Define 
+# Models to Access the database
+# through ActiveRecord.  Define
 # associations here if need be
 #
 # http://guides.rubyonrails.org/association_basics.html
