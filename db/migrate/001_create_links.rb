@@ -11,7 +11,6 @@ class CreateLinks < ActiveRecord::Migration
     def up
       create_table :links do |t|
         t.string :url
-        t.string :shortened
         t.timestamps
       end
     end

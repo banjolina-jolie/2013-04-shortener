@@ -42,6 +42,15 @@ eos
 # http://guides.rubyonrails.org/association_basics.html
 class Link < ActiveRecord::Base
     validates :url, :uniqueness => true
+    before_save :add_http
+
+    protected
+    def add_http
+        unless self.url.start_with? 'http://' then
+            self.url = 'http://' + self.url
+        end
+    end
+
 end
 
 get '/' do
@@ -56,17 +65,25 @@ get '/:id' do
     link = Link.find_by_id(params['id'])
     if link
         redirect link.url
+    else
+        status 404
     end
 end
 
 post '/new' do
+    url = params['url']
+    unless url.start_with? 'http://' then
+        url = 'http://' + url
+    end
+
     link = Link.new
-    link.url = params['url']
+    link.url = url
     link.save # generate id
 
     if link.errors then # assume is duplicate
-        link = Link.find_by_url params['url']
+        link = Link.find_by_url url
     end
+
     "http://localhost:4567/#{link.id}"
 end
 
