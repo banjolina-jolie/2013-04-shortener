@@ -65,6 +65,8 @@ end
 get '/:id' do
     link = Link.find_by_id(params['id'])
     if link
+        link.count += 1
+        link.save
         redirect link.url
     else
         status 404
