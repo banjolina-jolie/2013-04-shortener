@@ -36,7 +36,6 @@ form = <<-eos
     </script>
 eos
 
-# Models to Access the database
 # through ActiveRecord.  Define
 # associations here if need be
 #
@@ -49,28 +48,31 @@ get '/' do
     form
 end
 
-get '/1/:shortened' do |n|
-    puts "N ARGUMENT: #{n}"
+get '/jquery.js' do
+    send_file 'jquery.js'
+end
+
+get '/:id' do
+    link = Link.find_by_id(params['id'])
+    if link
+        redirect link.url
+    end
 end
 
 post '/new' do
     link = Link.new
     link.url = params['url']
     link.save # generate id
-    link.shortened = link.id
-    link.save
 
-    if link.errors then
+    if link.errors then # assume is duplicate
         link = Link.find_by_url params['url']
     end
-
-    "http://localhost:4567/1/#{link.id}"
+    "http://localhost:4567/#{link.id}"
 end
 
-get '/jquery.js' do
-    send_file 'jquery.js'
+after do
+  ActiveRecord::Base.connection.close
 end
-
 ####################################################
 ####  Implement Routes to make the specs pass ######
 ####################################################
