@@ -68,4 +68,16 @@ describe "URL Shortener" do
       last_response.status.should == 404
     end
   end
+
+  context "successful redirects" do
+    it "should increment count by one" do
+      post '/new', :url => 'www.simpler.com'
+      link = Link.find_by_url 'http://www.simpler.com'
+      old_count = link.count
+      short_link = last_response.body
+      get'/' + short_link.split('/')[3]
+      link = Link.find_by_url 'http://www.simpler.com'
+      link.count.should == old_count + 1
+    end
+  end
 end
