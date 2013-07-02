@@ -21,14 +21,15 @@ form = <<-eos
         <input type="submit" value="Shorten">
     </form>
     <h2>Results:</h2>
-    <h3 id="display"></h3>
+    <h3 id="display"><a id='link'></a></h3>
     <script src="jquery.js"></script>
 
     <script type="text/javascript">
         $(function() {
             $('#myForm').submit(function() {
             $.post('/new', $("#myForm").serialize(), function(data){
-                $('#display').html(data);
+                $('a#link').attr('href', data);
+                $('a#link').html(data);
                 });
             return false;
             });
@@ -64,6 +65,8 @@ end
 get '/:id' do
     link = Link.find_by_id(params['id'])
     if link
+        link.count += 1
+        link.save
         redirect link.url
     else
         status 404
